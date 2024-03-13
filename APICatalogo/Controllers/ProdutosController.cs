@@ -20,65 +20,107 @@ namespace APICatalogo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
-            var produtos = _context.Produtos.AsNoTracking().ToList();
-
-            if (!produtos.Any()) 
+            try
             {
-                return NotFound();
+                var produtos = _context.Produtos.AsNoTracking().ToList();
+
+                if (!produtos.Any())
+                {
+                    return NotFound();
+                }
+                return produtos;
             }
-            return produtos;
+            catch (Exception)
+            {
+
+                throw new ArgumentException("Ocorreu um erro ao buscar produto");
+            }
+            
         }
 
         [HttpGet("{id:int}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(x => x.ProdutoId == id);
-
-            if (produto is null)
+            try
             {
-                return NotFound("Produto não encontrado");
+                var produto = _context.Produtos.FirstOrDefault(x => x.ProdutoId == id);
+
+                if (produto is null)
+                {
+                    return NotFound("Produto não encontrado");
+                }
+                return produto;
             }
-            return produto;
+            catch (Exception)
+            {
+
+                throw new ArgumentException("Ocorreu um erro ao buscar produto");
+            }
         }
 
         [HttpPost]
         public ActionResult Post(Produto produto)
         {
-            if (produto is null)
-                return BadRequest();
+            try
+            {
+                if (produto is null)
+                    return BadRequest();
 
-            _context.Produtos.Add(produto);
-            _context.SaveChanges();
+                _context.Produtos.Add(produto);
+                _context.SaveChanges();
 
-            return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
+                return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
+            }
+            catch (Exception)
+            {
+
+                throw new ArgumentException("Ocorreu um erro ao tentar cadastrar");
+            }
+            
         }
 
         [HttpPut("{id:int}")]
         public ActionResult Put(int id, Produto produto)
         {
-            if(id != produto.ProdutoId)
+            try
             {
-                return BadRequest();
-            }
+                if (id != produto.ProdutoId)
+                {
+                    return BadRequest();
+                }
 
-            _context.Entry(produto).State = EntityState.Modified;
-            _context.SaveChanges();
-            return Ok(produto);
+                _context.Entry(produto).State = EntityState.Modified;
+                _context.SaveChanges();
+                return Ok(produto);
+            }
+            catch (Exception)
+            {
+
+                throw new ArgumentException("Ocorreu um erro ao tentar atualizar");
+            }
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
-            if (produto is null)
+            try
             {
-                return NotFound("Produto não localizado");
+                var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
+                if (produto is null)
+                {
+                    return NotFound("Produto não localizado");
+                }
+
+                _context.Produtos.Remove(produto);
+                _context.SaveChanges();
+
+                return Ok(produto);
             }
+            catch (Exception)
+            {
 
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
-
-            return Ok(produto);
+                throw new ArgumentException("Ocorreu um erro ao tentar deletar");
+            }
         }
     }
 }
