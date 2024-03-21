@@ -12,12 +12,15 @@ public class CategoriasController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<CategoriasController> _logger;
 
-    public CategoriasController(AppDbContext context, IConfiguration configuration)
+    public CategoriasController(AppDbContext context, IConfiguration configuration, ILogger<CategoriasController> logger)
     {
         _context = context;
         _configuration = configuration;
+        _logger = logger;
     }
+
     [HttpGet("LerArquivoConfig")]
     public string GetValores()
     {
@@ -32,6 +35,7 @@ public class CategoriasController : ControllerBase
     {
         try
         {
+        _logger.LogInformation("========== Teste logger");
             return _context.Categorias.Include(p => p.Produtos).Where(c => c.CategoriaId <=5).AsNoTracking().ToList();
         }
         catch (Exception)
