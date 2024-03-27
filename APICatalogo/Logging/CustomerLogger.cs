@@ -26,7 +26,7 @@ namespace APICatalogo.Logging
         //chamado para registrar uma mensagem de log
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            string mensagem = $"{logLevel.ToString()}: {eventId.id} - {formatter(state, exception)}";
+            string mensagem = $"{logLevel.ToString()}: {eventId.Id} - {formatter(state, exception)}";
 
             EscreverTextoNoArquivo(mensagem);
         }
@@ -34,7 +34,7 @@ namespace APICatalogo.Logging
 
         private void EscreverTextoNoArquivo(string mensagem)
         {
-            string caminhoArquivoLog = @"d:\dados\log\og_text.txt";
+            string caminhoArquivoLog = @"D:\Users\Maria Eduarda\log_test.txt";
 
             using(StreamWriter streamWritter = new StreamWriter(caminhoArquivoLog, true))
             {
