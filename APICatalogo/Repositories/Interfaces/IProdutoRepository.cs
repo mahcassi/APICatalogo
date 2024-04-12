@@ -9,5 +9,5 @@ namespace APICatalogo.Repositories.Interfaces
         Produto Create(Produto produto);
         bool Update(Produto produto);
         bool Delete(int id);
-;    }
+   }
 }
